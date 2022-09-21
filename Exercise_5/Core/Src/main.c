@@ -32,6 +32,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define RED_TIME 9
+#define YELLOW_TIME 2
+#define GREEN_TIME 3
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -302,70 +305,83 @@ int main(void)
   HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, SET);
   HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port, LED_YELLOW_1_Pin,SET);
   HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin,SET);
-  int time=5;
+  int time=RED_TIME;
   int ledstatus=0; //0:red 1:green 2:yellow
-  int timer1=3;
+  int timer1=GREEN_TIME;
+  int ledstatus1=1; //0:red 1:green 2:yellow
   while (1)
   {
- 	 if(ledstatus==0)
+ 	 if(ledstatus==0) //led1 is red
  	 {
- 		 HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,RESET);
- 		 if(time>2)
- 		 {
- 			 HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin, RESET);
- 		 }
- 		 if(time==2)
- 		 {
- 			 timer1=2;
- 		 }
- 		 if(time<=2 && time>0)
- 		 {
- 			 HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port,LED_GREEN_1_Pin, SET);
- 			 HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port,LED_YELLOW_1_Pin,RESET);
- 		 }
+ 		 HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, 0); //turn on red
  		 if(time==0)
  		 {
- 			 time=3;
- 			 ledstatus=1;//turn green
- 			 HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,SET);
- 			 HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, RESET);
- 			 HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, RESET);
- 			HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port,LED_YELLOW_1_Pin,SET);
- 			timer1=5;
+ 			 ledstatus=1;
+ 			 time=GREEN_TIME;
+ 			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin,0);//turn on green
+ 			HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, 1);//turn off red
  		 }
  	 }
- 	 if(ledstatus==1)
+ 	 if(ledstatus==1)//led 1 is green
  	 {
- 		 HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, RESET);
- 		 HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, RESET);
+ 		 HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, 0); //turn on green
  		 if(time==0)
  		 {
- 			 time=2;
- 			 ledstatus=2;//turn yellow
- 			 HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin,SET);
- 			 HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port,LED_YELLOW_Pin, RESET);
+ 			 ledstatus=2;
+ 			 time=YELLOW_TIME;
+ 			 HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin,0);//turn on yellow
+ 			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, 1);//turn off green
  		 }
  	 }
- 	 if(ledstatus==2)
+ 	 if(ledstatus==2)//led 1 is yellow
  	 {
- 		 HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port,LED_YELLOW_Pin, RESET);
- 		HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, RESET);
+ 		 HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, 0); //turn on yellow
  		 if(time==0)
  		 {
- 			 time=5;
- 			 ledstatus=0; //turn red
- 			 HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, SET);
- 			 HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,RESET);
- 			 HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin, RESET);
- 			 HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, SET);
- 			 timer1=3;
+ 			 ledstatus=0;
+ 			 time=RED_TIME;
+ 			 HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,0);//turn on red
+ 			HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, 1);//turn off yellow
  		 }
  	 }
+ 	if(ledstatus1==0) //led2 is red
+ 	 	 {
+ 	 		 HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, 0); //turn on red
+ 	 		 if(timer1==0)
+ 	 		 {
+ 	 			 ledstatus1=1;
+ 	 			 timer1=GREEN_TIME;
+ 	 			HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin,0);//turn on green
+ 	 			HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, 1);//turn off red
+ 	 		 }
+ 	 	 }
+ 	 	 if(ledstatus1==1)//led 2 is green
+ 	 	 {
+ 	 		 HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin, 0); //turn on green
+ 	 		 if(timer1==0)
+ 	 		 {
+ 	 			 ledstatus1=2;
+ 	 			 timer1=YELLOW_TIME;
+ 	 			 HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port, LED_YELLOW_1_Pin,0);//turn on yellow
+ 	 			HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin, 1);//turn off green
+ 	 		 }
+ 	 	 }
+ 	 	 if(ledstatus1==2)//led 2 is yellow
+ 	 	 {
+ 	 		 HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port, LED_YELLOW_1_Pin, 0); //turn on yellow
+ 	 		 if(timer1==0)
+ 	 		 {
+ 	 			 ledstatus1=0;
+ 	 			 timer1=RED_TIME;
+ 	 			 HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin,0);//turn on red
+ 	 			HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port, LED_YELLOW_1_Pin, 1);//turn off yellow
+ 	 		 }
+ 	 	 }
  	 display7SEG(time);
  	 display7SEGforled2(timer1);
  	 timer1--;
  	 time--;
- 	 HAL_Delay(1000);
+ 	 HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
